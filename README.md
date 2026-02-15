@@ -172,7 +172,7 @@ Dieses Projekt steht unter der MIT-Lizenz. Siehe [LICENSE](LICENSE) für Details
 
 ## 👤 Autor / Author
 
-**Werner Deutsch**  
+**Werner Deuermeier**  
 - GitHub: [@wdeu](https://github.com/wdeu)
 - Projeto: [calculo-mental](https://github.com/wdeu/calculo-mental)
 
