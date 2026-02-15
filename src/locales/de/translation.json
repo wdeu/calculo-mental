@@ -1,0 +1,12 @@
+{
+  "app": {
+    "title": "Kopfrechnen Trainer",
+    "subtitle": "Mathe üben mit Spaß!"
+  },
+  "menu": {
+    "practice": "Freies Üben",
+    "quiz": "Quiz-Modus",
+    "levels": "Stufen-Modus",
+    "settings": "Einstellungen"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "app": {
+    "title": "Treinador de Cálculo Mental",
+    "subtitle": "Pratica matemática com diversão!"
+  },
+  "menu": {
+    "practice": "Prática Livre",
+    "quiz": "Modo de Questionário",
+    "levels": "Modo de Níveis",
+    "settings": "Definições"
+  }
+}
