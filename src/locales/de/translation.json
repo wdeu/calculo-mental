@@ -1,0 +1,149 @@
+{
+  "app": {
+    "title": "Kopfrechnen Trainer",
+    "subtitle": "Mathe üben mit Spaß!"
+  },
+  "menu": {
+    "practice": "Freies Üben",
+    "quiz": "Quiz-Modus",
+    "levels": "Stufen-Modus",
+    "settings": "Einstellungen anzeigen"
+  },
+  "modes": {
+    "practice": "Freies Üben",
+    "quiz": "Quiz: Frage {{current}}/{{total}}",
+    "level": "Stufe {{level}}"
+  },
+  "buttons": {
+    "back": "Zurück",
+    "check": "Antwort prüfen",
+    "next": "Nächste Aufgabe",
+    "showResults": "Ergebnisse anzeigen",
+    "autoLoading": "Wird automatisch geladen...",
+    "startPractice": "Üben starten",
+    "startQuiz": "Quiz starten",
+    "startLevel": "Level starten",
+    "nextLevel": "Nächste Stufe starten",
+    "levelSelection": "Level Auswahl",
+    "mainMenu": "Hauptmenü",
+    "restart": "Neu starten",
+    "readAloud": "Aufgabe vorlesen"
+  },
+  "problem": {
+    "question": "Was ist {{num1}} {{operation}} {{num2}}?",
+    "placeholder": "Deine Antwort...",
+    "correctAnswer": "Die richtige Antwort ist:",
+    "listenCarefully": "Gut zuhören!",
+    "mentalMath": "Kopfrechnen"
+  },
+  "operations": {
+    "plus": "plus",
+    "minus": "minus",
+    "times": "mal",
+    "divided": "geteilt durch"
+  },
+  "feedback": {
+    "encouraging": {
+      "correct": [
+        "Super gemacht! 🌟",
+        "Fantastisch! Das war richtig! 🎉",
+        "Toll! Du bist ein Mathe-Star! ⭐",
+        "Perfekt! Weiter so! 💪"
+      ],
+      "incorrect": [
+        "Fast! Versuch es nochmal! 💪",
+        "Nicht ganz, aber du schaffst das! 🌈",
+        "Ups! Probier es noch einmal! 😊",
+        "Das war knapp! Nochmal versuchen! 🎯"
+      ]
+    },
+    "simple": {
+      "correct": [
+        "Richtig! ✓",
+        "Korrekt! ✓",
+        "Ja, das stimmt! ✓",
+        "Genau! ✓"
+      ],
+      "incorrect": [
+        "Leider falsch. ✗",
+        "Das ist nicht richtig. ✗",
+        "Falsch. ✗",
+        "Nein, das stimmt nicht. ✗"
+      ]
+    },
+    "playful": {
+      "correct": [
+        "Wow! Du bist ein Rechenkönig! 👑",
+        "Yippie! Das war super! 🎈",
+        "Hurra! Richtig gerechnet! 🎊",
+        "Juhu! Du kannst das toll! 🚀"
+      ],
+      "incorrect": [
+        "Hoppla! Das war nicht ganz richtig! 🐰",
+        "Oh nein! Versuch es nochmal! 🐸",
+        "Autsch! Fast geschafft! 🦊",
+        "Uups! Noch ein Versuch! 🐻"
+      ]
+    },
+    "teacher": {
+      "correct": [
+        "Sehr gut! Das hast du richtig gelöst! 📚",
+        "Ausgezeichnet! Weiter so! 📝",
+        "Prima! Das war korrekt! ✏️",
+        "Gut gemacht! Die Lösung stimmt! 📖"
+      ],
+      "incorrect": [
+        "Das ist noch nicht richtig. Überlege nochmal! 🤔",
+        "Leider falsch. Versuche es erneut! 📐",
+        "Nicht korrekt. Rechne nochmal nach! 🔢",
+        "Das stimmt nicht. Probier es nochmal! 📏"
+      ]
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "operation": "Rechenart",
+    "difficulty": "Schwierigkeit",
+    "feedbackStyle": "Feedback-Stil",
+    "voice": "Stimme",
+    "speechRate": "Sprechgeschwindigkeit",
+    "testVoice": "Stimme testen",
+    "autoPlayNext": "Automatisch weiter",
+    "showEquation": "Aufgabe zeigen",
+    "mentalMathMode": "Kopfrechnen-Modus",
+    "close": "Schließen"
+  },
+  "difficulties": {
+    "easy": "Leicht",
+    "medium": "Mittel",
+    "hard": "Schwer"
+  },
+  "feedbackStyles": {
+    "encouraging": "Aufmunternd",
+    "simple": "Einfach",
+    "playful": "Verspielt",
+    "teacher": "Lehrer-Stil"
+  },
+  "score": {
+    "correct": "Richtig",
+    "total": "Gesamt",
+    "question": "Aufgabe {{current}} von {{total}}",
+    "successRate": "{{percent}}% richtige Antworten sind nötig um die Stufe zu schaffen!"
+  },
+  "results": {
+    "title": "Quiz Ergebnis",
+    "score": "Du hast {{correct}} von {{total}} Aufgaben richtig gelöst!",
+    "percentage": "Das sind {{percent}}%!",
+    "perfect": "Perfekt! 🏆",
+    "great": "Sehr gut! 🌟",
+    "good": "Gut gemacht! 👍",
+    "keepPracticing": "Weiter üben! 💪"
+  },
+  "levelComplete": {
+    "title": "Stufe geschafft! 🎉",
+    "completed": "Stufe {{level}} abgeschlossen!",
+    "unlockCode": "Dein Code:",
+    "rememberCode": "Merke dir diesen Code!",
+    "nextUnlocked": "Stufe {{level}} freigeschaltet!"
+  }
+}
