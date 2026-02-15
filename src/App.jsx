@@ -10,8 +10,11 @@ import {
 import LevelSystem from "./levelSystem.js";
 import LevelSelector from "./LevelSelector.jsx";
 import ttsService from "./ttsService.js";
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher.jsx';
 
 const MathTrainerApp = () => {
+  const { t } = useTranslation();
   const [levelSystem] = useState(() => new LevelSystem());
   const [settings, setSettings] = useState({
     operation: "+",
@@ -449,11 +452,14 @@ const MathTrainerApp = () => {
       <div className='min-h-screen bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-8'>
         <div className='max-w-2xl mx-auto'>
           <div className='bg-white rounded-3xl shadow-2xl p-8'>
-            <h1 className='text-4xl font-bold text-center mb-2 text-purple-600'>
-              Kopfrechnen Trainer
-            </h1>
+            <div className="flex justify-between items-center mb-2">
+              <h1 className='text-4xl font-bold text-purple-600'>
+                {t('app.title')}
+              </h1>
+              <LanguageSwitcher />
+            </div>
             <p className='text-center text-gray-600 mb-8'>
-              Übe Mathe mit Spaß! 🎓
+              {t('app.subtitle')} 🎓
             </p>
 
             {showSettings ? (
