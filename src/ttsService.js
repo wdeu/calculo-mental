@@ -1,242 +1,89 @@
-// OpenAI TTS Service for Kopfrechnen Trainer
-import OpenAI from "openai";
+// Web Speech API TTS Service for Cálculo Mental
+// Pure browser-based text-to-speech (no external dependencies)
 
 class TTSService {
   constructor() {
-    this.openai = null;
-    this.audioCache = new Map(); // Cache for generated audio
-    this.isInitialized = false;
-    this.initializeOpenAI();
-  }
-
-  initializeOpenAI() {
-    try {
-      const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-      console.log(
-        "🔑 API Key loaded:",
-        apiKey ? `${apiKey.substring(0, 10)}...` : "NOT FOUND"
-      );
-
-      if (!apiKey || apiKey.includes("your-real-openai-api-key-here")) {
-        console.error("❌ OpenAI API key not configured properly");
-        this.isInitialized = false;
-        return;
-      }
-
-      // Initialize OpenAI client
-      this.openai = new OpenAI({
-        apiKey: apiKey,
-        dangerouslyAllowBrowser: true, // Required for client-side usage
-      });
-      this.isInitialized = true;
-      console.log("✅ OpenAI TTS Service initialized");
-    } catch (error) {
-      console.error("❌ Failed to initialize OpenAI TTS:", error);
-      this.isInitialized = false;
+    this.isAvailable = 'speechSynthesis' in window;
+    this.currentLanguage = 'de-DE';
+    
+    if (!this.isAvailable) {
+      console.warn('⚠️  Web Speech API not available in this browser');
     }
   }
 
-  // Generate cache key for text
-  getCacheKey(text, voice = "alloy") {
-    return `${voice}_${text.toLowerCase().replace(/\s+/g, "_")}`;
+  // Set language for TTS (de-DE or pt-PT)
+  setLanguage(lang) {
+    const languageMap = {
+      'de': 'de-DE',
+      'pt': 'pt-PT'
+    };
+    this.currentLanguage = languageMap[lang] || 'de-DE';
   }
 
-  // Check if audio is cached
-  getCachedAudio(text, voice = "alloy") {
-    const key = this.getCacheKey(text, voice);
-    return this.audioCache.get(key);
+  // Get best available voice for current language
+  getBestVoice() {
+    if (!this.isAvailable) return null;
+    
+    const voices = window.speechSynthesis.getVoices();
+    const langVoices = voices.filter(voice => 
+      voice.lang.startsWith(this.currentLanguage.split('-')[0])
+    );
+
+    // Prefer Google voices, then Microsoft, then any native voice
+    return langVoices.find(v => v.name.includes('Google')) ||
+           langVoices.find(v => v.name.includes('Microsoft')) ||
+           langVoices.find(v => v.lang === this.currentLanguage) ||
+           langVoices[0];
   }
 
-  // Cache audio data
-  setCachedAudio(text, voice, audioBlob) {
-    const key = this.getCacheKey(text, voice);
-    this.audioCache.set(key, audioBlob);
-
-    // Limit cache size (keep last 100 items)
-    if (this.audioCache.size > 100) {
-      const firstKey = this.audioCache.keys().next().value;
-      this.audioCache.delete(firstKey);
-    }
-  }
-
-  // Generate speech using OpenAI TTS
-  async generateSpeech(text, voice = "alloy") {
-    if (!this.isInitialized) {
-      throw new Error("TTS Service not initialized");
-    }
-
-    // Check cache first
-    const cachedAudio = this.getCachedAudio(text, voice);
-    if (cachedAudio) {
-      console.log("🎵 Using cached audio for:", text);
-      return cachedAudio;
-    }
-
-    try {
-      console.log("🎤 Generating TTS for:", text);
-
-      const response = await this.openai.audio.speech.create({
-        model: "tts-1", // Use standard quality (cheaper)
-        voice: voice, // alloy, echo, fable, onyx, nova, shimmer
-        input: text,
-        response_format: "mp3",
-      });
-
-      // Convert response to blob
-      const audioBlob = new Blob([await response.arrayBuffer()], {
-        type: "audio/mpeg",
-      });
-
-      // Cache the audio
-      this.setCachedAudio(text, voice, audioBlob);
-
-      return audioBlob;
-    } catch (error) {
-      console.error("❌ TTS generation failed:", error);
-      throw error;
-    }
-  }
-
-  // Play audio from blob
-  async playAudio(audioBlob) {
-    try {
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio(audioUrl);
-
-      return new Promise((resolve, reject) => {
-        audio.onended = () => {
-          URL.revokeObjectURL(audioUrl);
-          resolve();
-        };
-        audio.onerror = (error) => {
-          URL.revokeObjectURL(audioUrl);
-          reject(error);
-        };
-        audio.play();
-      });
-    } catch (error) {
-      console.error("❌ Audio playback failed:", error);
-      throw error;
-    }
-  }
-
-  // Main method to speak text
-  async speak(text, voice = "alloy", isCorrect = null) {
-    console.log(`🎤 TTS Request: "${text}" with voice: ${voice}`);
-
-    // For German text, use browser's German voices (much better pronunciation)
-    console.log("🇩🇪 Using German browser voices for better pronunciation");
-    this.useGermanWebSpeech(text, isCorrect);
-    return;
-
-    // Keep OpenAI TTS code for future use with English content
-    /*
-    if (!this.isInitialized) {
-      console.warn("⚠️ OpenAI TTS not initialized, using fallback");
-      this.fallbackToWebSpeech(text);
+  // Main speak method
+  speak(text, isCorrect = null) {
+    if (!this.isAvailable) {
+      console.warn('⚠️  Speech synthesis not available');
       return;
     }
 
-    try {
-      const audioBlob = await this.generateSpeech(text, voice);
-      console.log("✅ OpenAI TTS audio generated, playing...");
-      await this.playAudio(audioBlob);
-      console.log("✅ OpenAI TTS playback completed");
-    } catch (error) {
-      console.error("❌ OpenAI TTS failed:", error);
-      console.log("🔄 Falling back to browser TTS");
-      // Fallback to browser TTS if OpenAI fails
-      this.fallbackToWebSpeech(text);
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = this.currentLanguage;
+    utterance.rate = 0.9; // Slightly slower for clarity
+
+    // Add emotion through pitch for feedback
+    if (isCorrect !== null) {
+      utterance.pitch = isCorrect ? 1.2 : 0.9; // Higher pitch for correct, lower for incorrect
     }
-    */
-  }
 
-  // Use browser Web Speech API with best German voice
-  useGermanWebSpeech(text, isCorrect = null) {
-    console.log("🇩🇪 Using German Web Speech API");
-    if ("speechSynthesis" in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "de-DE";
-      utterance.rate = 0.9;
-
-      // Try to find the best German voice
-      const voices = window.speechSynthesis.getVoices();
-      const germanVoices = voices.filter((voice) =>
-        voice.lang.startsWith("de")
-      );
-
-      // Prefer Google German voices, then any German voice
-      const bestVoice =
-        germanVoices.find(
-          (voice) => voice.name.includes("Google") && voice.lang.includes("DE")
-        ) ||
-        germanVoices.find(
-          (voice) =>
-            voice.name.includes("Microsoft") && voice.lang.includes("DE")
-        ) ||
-        germanVoices[0];
-
-      if (bestVoice) {
-        utterance.voice = bestVoice;
-        console.log(
-          `🎤 Using German voice: ${bestVoice.name} (${bestVoice.lang})`
-        );
-      }
-
-      // Add emotion through pitch for feedback
-      if (isCorrect !== null) {
-        utterance.pitch = isCorrect ? 1.2 : 0.9;
-      }
-
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
+    // Set best available voice
+    const bestVoice = this.getBestVoice();
+    if (bestVoice) {
+      utterance.voice = bestVoice;
+      console.log(`🎤 Using voice: ${bestVoice.name} (${bestVoice.lang})`);
     }
+
+    window.speechSynthesis.speak(utterance);
   }
 
-  // Fallback to browser Web Speech API
-  fallbackToWebSpeech(text) {
-    console.log("🔄 Falling back to Web Speech API");
-    this.useGermanWebSpeech(text);
-  }
-
-  // Preload common phrases for better performance
+  // Preload common phrases (for Web Speech API, this just ensures voices are loaded)
   async preloadCommonPhrases() {
-    const commonPhrases = [
-      "Super gemacht!",
-      "Richtig!",
-      "Sehr gut!",
-      "Das ist korrekt!",
-      "Weiter zur nächsten Aufgabe!",
-      "Versuche es noch einmal!",
-      "Kopfrechnen",
-      "Gut zuhören!",
-    ];
-
-    console.log("🔄 Preloading common phrases...");
-
-    for (const phrase of commonPhrases) {
-      try {
-        await this.generateSpeech(phrase);
-      } catch (error) {
-        console.warn(`⚠️ Failed to preload: ${phrase}`, error);
+    return new Promise((resolve) => {
+      // Web Speech API loads voices asynchronously
+      if (window.speechSynthesis.getVoices().length > 0) {
+        resolve();
+      } else {
+        window.speechSynthesis.onvoiceschanged = () => {
+          resolve();
+        };
       }
+    });
+  }
+
+  // Stop any ongoing speech
+  stop() {
+    if (this.isAvailable) {
+      window.speechSynthesis.cancel();
     }
-
-    console.log("✅ Common phrases preloaded");
-  }
-
-  // Get cache statistics
-  getCacheStats() {
-    return {
-      size: this.audioCache.size,
-      keys: Array.from(this.audioCache.keys()),
-    };
-  }
-
-  // Clear cache
-  clearCache() {
-    this.audioCache.clear();
-    console.log("🗑️ TTS cache cleared");
   }
 }
 
