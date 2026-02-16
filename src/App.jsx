@@ -75,8 +75,8 @@ const MathTrainerApp = () => {
     },
     "*": {
       easy: { min: 1, max: 5 },
-      medium: { min: 1, max: 10 },
-      hard: { min: 1, max: 12 },
+      medium: { min: 2, max: 10 },
+      hard: { min: 5, max: 12 },
     },
     "/": {
       easy: { min: 1, max: 5 },
@@ -154,10 +154,10 @@ const MathTrainerApp = () => {
       num1 = num2 * multiplier;
       answer = multiplier;
     } else if (operation === "-") {
-      // For subtraction, ensure positive results
+      // For subtraction, ensure positive results (num1 >= 2 so num2 can be < num1)
       num1 =
-        Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
-      num2 = Math.floor(Math.random() * num1) + 1;
+        Math.floor(Math.random() * (range.max - Math.max(range.min, 2) + 1)) + Math.max(range.min, 2);
+      num2 = Math.floor(Math.random() * (num1 - 1)) + 1;
       answer = num1 - num2;
     } else if (operation === "*") {
       num1 =
