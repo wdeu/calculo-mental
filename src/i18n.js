@@ -6,6 +6,8 @@ import translationDE from './locales/de/translation.json';
 import translationPT from './locales/pt/translation.json';
 
 // the translations
+const savedLanguage = localStorage.getItem('language') || 'de';
+
 const resources = {
   de: {
     translation: translationDE
@@ -19,7 +21,7 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: 'de', // default language
+    lng: savedLanguage,
     fallbackLng: 'de', // fallback language
     interpolation: {
       escapeValue: false // react already safes from xss

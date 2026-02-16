@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher.jsx';
 
 const MathTrainerApp = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [levelSystem] = useState(() => new LevelSystem());
   const [settings, setSettings] = useState({
     operation: "+",
@@ -62,6 +62,11 @@ const MathTrainerApp = () => {
     initializeTTS();
   }, []);
 
+  // Sync TTS language when i18n language changes
+  useEffect(() => {
+    ttsService.setLanguage(i18n.language);
+  }, [i18n.language]);
+
   const difficultyRanges = {
     "+": {
       easy: { min: 1, max: 10 },
@@ -85,58 +90,25 @@ const MathTrainerApp = () => {
     },
   };
 
-  const feedbackMessages = {
-    encouraging: {
-      correct: [
-        "Super gemacht! 🌟",
-        "Fantastisch! Das war richtig! 🎉",
-        "Toll! Du bist ein Mathe-Star! ⭐",
-        "Perfekt! Weiter so! 💪",
-      ],
-      incorrect: [
-        "Fast! Versuch es nochmal! 💪",
-        "Nicht ganz, aber du schaffst das! 🌈",
-        "Ups! Probier es noch einmal! 😊",
-        "Das war knapp! Nochmal versuchen! 🎯",
-      ],
-    },
-    simple: {
-      correct: ["Richtig! ✓", "Korrekt! ✓", "Ja, das stimmt! ✓", "Genau! ✓"],
-      incorrect: [
-        "Leider falsch. ✗",
-        "Das ist nicht richtig. ✗",
-        "Falsch. ✗",
-        "Nein, das stimmt nicht. ✗",
-      ],
-    },
-    playful: {
-      correct: [
-        "Wow! Du bist ein Rechenkönig! 👑",
-        "Yippie! Das war super! 🎈",
-        "Hurra! Richtig gerechnet! 🎊",
-        "Juhu! Du kannst das toll! 🚀",
-      ],
-      incorrect: [
-        "Hoppla! Das war nicht ganz richtig! 🐰",
-        "Oh nein! Versuch es nochmal! 🐸",
-        "Autsch! Fast geschafft! 🦊",
-        "Uups! Noch ein Versuch! 🐻",
-      ],
-    },
-    teacher: {
-      correct: [
-        "Sehr gut! Das hast du richtig gelöst! 📚",
-        "Ausgezeichnet! Weiter so! 📝",
-        "Prima! Das war korrekt! ✏️",
-        "Gut gemacht! Die Lösung stimmt! 📖",
-      ],
-      incorrect: [
-        "Das ist noch nicht richtig. Überlege nochmal! 🤔",
-        "Leider falsch. Versuche es erneut! 📐",
-        "Nicht korrekt. Rechne nochmal nach! 🔢",
-        "Das stimmt nicht. Probier es nochmal! 📏",
-      ],
-    },
+  const getFeedbackMessages = () => {
+    return {
+      encouraging: {
+        correct: t('feedback.encouraging.correct', { returnObjects: true }),
+        incorrect: t('feedback.encouraging.incorrect', { returnObjects: true }),
+      },
+      simple: {
+        correct: t('feedback.simple.correct', { returnObjects: true }),
+        incorrect: t('feedback.simple.incorrect', { returnObjects: true }),
+      },
+      playful: {
+        correct: t('feedback.playful.correct', { returnObjects: true }),
+        incorrect: t('feedback.playful.incorrect', { returnObjects: true }),
+      },
+      teacher: {
+        correct: t('feedback.teacher.correct', { returnObjects: true }),
+        incorrect: t('feedback.teacher.incorrect', { returnObjects: true }),
+      },
+    };
   };
 
   const generateProblem = () => {
@@ -180,20 +152,22 @@ const MathTrainerApp = () => {
   const speakProblem = async (problem, inputRef) => {
     try {
       const operationWords = {
-        "+": "plus",
-        "-": "minus",
-        "*": "mal",
-        "/": "geteilt durch",
+        "+": t('operations.plus'),
+        "-": t('operations.minus'),
+        "*": t('operations.times'),
+        "/": t('operations.divided'),
       };
 
-      const text = `Was ist ${problem.num1} ${
-        operationWords[problem.operation]
-      } ${problem.num2}?`;
+      const text = t('problem.question', {
+        num1: problem.num1,
+        operation: operationWords[problem.operation],
+        num2: problem.num2,
+      });
 
       console.log("🎤 Speaking problem:", text);
 
-      // Use OpenAI TTS with German voice
-      await ttsService.speak(text, "alloy");
+      // Use TTS with current language voice
+      await ttsService.speak(text);
 
       // Focus input field after speech ends
       if (inputRef && inputRef.current) {
@@ -201,7 +175,6 @@ const MathTrainerApp = () => {
       }
     } catch (error) {
       console.error("❌ TTS failed for problem:", error);
-      // Fallback to browser TTS is handled in ttsService
     }
   };
 
@@ -215,8 +188,8 @@ const MathTrainerApp = () => {
 
       console.log("🎤 Speaking feedback:", cleanText);
 
-      // Use German TTS with emotion for feedback
-      await ttsService.speak(cleanText, "alloy", isCorrect);
+      // Use TTS with emotion for feedback
+      await ttsService.speak(cleanText, isCorrect);
 
       // Auto-advance to next question after feedback if enabled
       if (settings.autoPlayNext) {
@@ -226,7 +199,6 @@ const MathTrainerApp = () => {
       }
     } catch (error) {
       console.error("❌ TTS failed for feedback:", error);
-      // Fallback to browser TTS is handled in ttsService
     }
   };
 
@@ -312,7 +284,7 @@ const MathTrainerApp = () => {
   const speakLevelExplanation = (level) => {
     if ("speechSynthesis" in window && level.explanation) {
       const utterance = new SpeechSynthesisUtterance(level.explanation);
-      utterance.lang = "de-DE";
+      utterance.lang = i18n.language === 'pt' ? 'pt-PT' : 'de-DE';
       utterance.rate = settings.speechRate;
 
       if (settings.voiceURI) {
@@ -341,6 +313,7 @@ const MathTrainerApp = () => {
 
   const checkAnswer = () => {
     const isCorrect = parseInt(userAnswer) === currentProblem.answer;
+    const feedbackMessages = getFeedbackMessages();
     const messages =
       feedbackMessages[settings.feedbackStyle][
         isCorrect ? "correct" : "incorrect"
@@ -357,7 +330,7 @@ const MathTrainerApp = () => {
     if (mode === "level-practice") {
       const encouragingMessage = isCorrect
         ? message
-        : `${message} Weiter zur nächsten Aufgabe!`;
+        : `${message} ${t('feedback.nextTask')}`;
       speakFeedback(encouragingMessage, isCorrect);
     } else {
       speakFeedback(message, isCorrect);
@@ -467,7 +440,7 @@ const MathTrainerApp = () => {
                 <div>
                   <label className='flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition'>
                     <span className='text-sm font-semibold text-gray-700'>
-                      Aufgabe anzeigen
+                      {t('settings.showEquation')}
                     </span>
                     <input
                       type='checkbox'
@@ -482,14 +455,14 @@ const MathTrainerApp = () => {
                     />
                   </label>
                   <p className='text-xs text-gray-500 mt-1 ml-3'>
-                    Wenn ausgeschaltet, nur zuhören (reines Kopfrechnen)
+                    {t('settings.showEquationHint')}
                   </p>
                 </div>
 
                 <div>
                   <label className='flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition'>
                     <span className='text-sm font-semibold text-gray-700'>
-                      Kopfrechnen-Modus
+                      {t('settings.mentalMathMode')}
                     </span>
                     <input
                       type='checkbox'
@@ -504,13 +477,13 @@ const MathTrainerApp = () => {
                     />
                   </label>
                   <p className='text-xs text-gray-500 mt-1 ml-3'>
-                    Zeigt "Kopfrechnen" statt der Rechenaufgabe
+                    {t('settings.mentalMathModeHint')}
                   </p>
                 </div>
 
                 <div>
                   <label className='block text-sm font-semibold mb-2 text-gray-700'>
-                    Rechenart
+                    {t('settings.operation')}
                   </label>
                   <div className='grid grid-cols-4 gap-2'>
                     {["+", "-", "*", "/"].map((op) => (
@@ -533,7 +506,7 @@ const MathTrainerApp = () => {
 
                 <div>
                   <label className='block text-sm font-semibold mb-2 text-gray-700'>
-                    Schwierigkeit
+                    {t('settings.difficulty')}
                   </label>
                   <div className='grid grid-cols-3 gap-2'>
                     {["easy", "medium", "hard"].map((diff) => (
@@ -548,11 +521,7 @@ const MathTrainerApp = () => {
                             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                         }`}
                       >
-                        {diff === "easy"
-                          ? "Leicht"
-                          : diff === "medium"
-                          ? "Mittel"
-                          : "Schwer"}
+                        {t(`difficulties.${diff}`)}
                       </button>
                     ))}
                   </div>
@@ -560,7 +529,7 @@ const MathTrainerApp = () => {
 
                 <div>
                   <label className='block text-sm font-semibold mb-2 text-gray-700'>
-                    Sprechgeschwindigkeit: {settings.speechRate.toFixed(1)}x
+                    {t('settings.speechRate')}: {settings.speechRate.toFixed(1)}x
                   </label>
                   <input
                     type='range'
@@ -577,16 +546,16 @@ const MathTrainerApp = () => {
                     className='w-full'
                   />
                   <div className='flex justify-between text-xs text-gray-500 mt-1'>
-                    <span>Langsam</span>
-                    <span>Normal</span>
-                    <span>Schnell</span>
+                    <span>{t('settings.slow')}</span>
+                    <span>{t('settings.normal')}</span>
+                    <span>{t('settings.fast')}</span>
                   </div>
                 </div>
 
                 <div>
                   <label className='flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition'>
                     <span className='text-sm font-semibold text-gray-700'>
-                      Automatisch zur nächsten Frage
+                      {t('settings.autoPlayNext')}
                     </span>
                     <input
                       type='checkbox'
@@ -601,20 +570,20 @@ const MathTrainerApp = () => {
                     />
                   </label>
                   <p className='text-xs text-gray-500 mt-1 ml-3'>
-                    Nach dem Feedback geht es automatisch weiter
+                    {t('settings.autoPlayNextHint')}
                   </p>
                 </div>
 
                 <div>
                   <label className='block text-sm font-semibold mb-2 text-gray-700'>
-                    Feedback-Stil
+                    {t('settings.feedbackStyle')}
                   </label>
                   <div className='grid grid-cols-2 gap-2'>
                     {[
-                      { key: "encouraging", label: "Ermutigend" },
-                      { key: "simple", label: "Einfach" },
-                      { key: "playful", label: "Spielerisch" },
-                      { key: "teacher", label: "Lehrer" },
+                      { key: "encouraging", label: t('feedbackStyles.encouraging') },
+                      { key: "simple", label: t('feedbackStyles.simple') },
+                      { key: "playful", label: t('feedbackStyles.playful') },
+                      { key: "teacher", label: t('feedbackStyles.teacher') },
                     ].map((style) => (
                       <button
                         key={style.key}
@@ -642,8 +611,8 @@ const MathTrainerApp = () => {
               >
                 <Settings size={20} />
                 {showSettings
-                  ? "Einstellungen verstecken"
-                  : "Einstellungen anzeigen"}
+                  ? t('menu.hideSettings')
+                  : t('menu.settings')}
               </button>
             </div>
 
@@ -653,7 +622,7 @@ const MathTrainerApp = () => {
                 className='w-full py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition shadow-lg'
               >
                 <Target size={24} />
-                Level Training (16 Stufen)
+                {t('menu.levels')}
               </button>
 
               <button
@@ -661,7 +630,7 @@ const MathTrainerApp = () => {
                 className='w-full py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition shadow-lg'
               >
                 <Play size={24} />
-                Freies Üben
+                {t('menu.practice')}
               </button>
 
               <button
@@ -669,15 +638,18 @@ const MathTrainerApp = () => {
                 className='w-full py-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition shadow-lg'
               >
                 <Award size={24} />
-                Quiz (10 Fragen)
+                {t('menu.quiz')}
               </button>
             </div>
 
             {score.total > 0 && (
               <div className='mt-8 p-4 bg-yellow-50 rounded-xl border-2 border-yellow-200'>
                 <p className='text-center text-lg font-semibold text-gray-700'>
-                  Bisherige Statistik: {score.correct} von {score.total} richtig
-                  ({Math.round((score.correct / score.total) * 100)}%)
+                  {t('score.stats', {
+                    correct: score.correct,
+                    total: score.total,
+                    percent: Math.round((score.correct / score.total) * 100),
+                  })}
                 </p>
               </div>
             )}
@@ -703,26 +675,26 @@ const MathTrainerApp = () => {
       <div className='min-h-screen bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-8 flex items-center justify-center'>
         <div className='bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center'>
           <h2 className='text-3xl font-bold mb-4 text-purple-600'>
-            Quiz beendet! 🎉
+            {t('results.title')} 🎉
           </h2>
           <div className='mb-6'>
             <div className='text-6xl font-bold text-blue-600 mb-2'>
               {percentage}%
             </div>
             <p className='text-xl text-gray-700'>
-              {score.correct} von {score.total} richtig
+              {t('results.score', { correct: score.correct, total: score.total })}
             </p>
           </div>
 
           <div className='mb-6 p-4 bg-gradient-to-r from-yellow-100 to-yellow-200 rounded-xl'>
             <p className='text-lg font-semibold'>
               {percentage >= 90
-                ? "🌟 Hervorragend! Du bist ein Mathe-Champion!"
+                ? `🌟 ${t('results.perfect')}`
                 : percentage >= 70
-                ? "⭐ Sehr gut! Weiter so!"
+                ? `⭐ ${t('results.great')}`
                 : percentage >= 50
-                ? "👍 Gut gemacht! Übung macht den Meister!"
-                : "💪 Nicht aufgeben! Versuche es nochmal!"}
+                ? `👍 ${t('results.good')}`
+                : `💪 ${t('results.keepPracticing')}`}
             </p>
           </div>
 
@@ -733,7 +705,7 @@ const MathTrainerApp = () => {
             }}
             className='w-full py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-xl font-bold text-lg transition'
           >
-            Zurück zum Menü
+            {t('buttons.backToMenu')}
           </button>
         </div>
       </div>
@@ -746,23 +718,22 @@ const MathTrainerApp = () => {
       <div className='min-h-screen bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-8 flex items-center justify-center'>
         <div className='bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center'>
           <h2 className='text-3xl font-bold mb-4 text-green-600'>
-            Stufe geschafft! 🎉
+            {t('levelComplete.title')} 🎉
           </h2>
           <div className='mb-6'>
             <div className='text-6xl mb-4'>🏆</div>
             <p className='text-xl text-gray-700 mb-2'>
-              Stufe {currentLevelId?.split("-")[1]} abgeschlossen!
+              {t('levelComplete.completed', { level: currentLevelId?.split("-")[1] })}
             </p>
             <div className='bg-yellow-100 border-2 border-yellow-300 rounded-xl p-4 mb-4'>
               <p className='text-lg font-bold text-yellow-800'>
-                Dein Code: {levelCompleteData.unlockCode}
+                {t('levelComplete.unlockCode')} {levelCompleteData.unlockCode}
               </p>
-              <p className='text-sm text-yellow-700'>Merke dir diesen Code!</p>
+              <p className='text-sm text-yellow-700'>{t('levelComplete.rememberCode')}</p>
             </div>
             {levelCompleteData.nextLevelUnlocked && (
               <p className='text-green-600 font-semibold'>
-                Stufe {levelCompleteData.nextLevelUnlocked.split("-")[1]}{" "}
-                freigeschaltet!
+                {t('levelComplete.nextUnlocked', { level: levelCompleteData.nextLevelUnlocked.split("-")[1] })}
               </p>
             )}
           </div>
@@ -775,7 +746,7 @@ const MathTrainerApp = () => {
                 }}
                 className='w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold text-lg transition'
               >
-                Nächste Stufe starten
+                {t('buttons.nextLevel')}
               </button>
             )}
             <button
@@ -785,7 +756,7 @@ const MathTrainerApp = () => {
               }}
               className='w-full py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-bold text-lg transition'
             >
-              Level Auswahl
+              {t('buttons.levelSelection')}
             </button>
             <button
               onClick={() => {
@@ -794,7 +765,7 @@ const MathTrainerApp = () => {
               }}
               className='w-full py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-xl font-bold text-lg transition'
             >
-              Hauptmenü
+              {t('buttons.mainMenu')}
             </button>
           </div>
         </div>
@@ -809,16 +780,16 @@ const MathTrainerApp = () => {
           <div className='flex justify-between items-center mb-6'>
             <h2 className='text-2xl font-bold text-purple-600'>
               {mode === "practice"
-                ? "Freies Üben"
+                ? t('modes.practice')
                 : mode === "level-practice"
-                ? `Stufe ${currentLevelId?.split("-")[1]}`
-                : `Quiz: Frage ${quizIndex + 1}/10`}
+                ? t('modes.level', { level: currentLevelId?.split("-")[1] })
+                : t('modes.quiz', { current: quizIndex + 1, total: 10 })}
             </h2>
             <button
               onClick={() => setMode("menu")}
               className='px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition'
             >
-              Zurück
+              {t('buttons.back')}
             </button>
           </div>
 
@@ -846,13 +817,13 @@ const MathTrainerApp = () => {
               <button
                 onClick={() => speakProblem(currentProblem, inputRef)}
                 className='p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-full transition'
-                title='Aufgabe vorlesen'
+                title={t('buttons.readAloud')}
               >
                 <Volume2 size={24} />
               </button>
               {settings.kopfrechnenMode ? (
                 <div className='text-5xl font-bold text-purple-600'>
-                  Kopfrechnen
+                  {t('problem.mentalMath')}
                 </div>
               ) : settings.showEquation ? (
                 <div className='text-5xl font-bold text-gray-800'>
@@ -862,7 +833,7 @@ const MathTrainerApp = () => {
                 </div>
               ) : (
                 <div className='text-4xl font-bold text-gray-500 italic'>
-                  Gut zuhören! 👂
+                  {t('problem.listenCarefully')} 👂
                 </div>
               )}
             </div>
@@ -875,7 +846,7 @@ const MathTrainerApp = () => {
               value={userAnswer}
               onChange={(e) => setUserAnswer(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder='Deine Antwort...'
+              placeholder={t('problem.placeholder')}
               disabled={feedback !== null}
               className='w-full p-4 text-3xl text-center border-4 border-purple-300 rounded-xl focus:outline-none focus:border-purple-500 disabled:bg-gray-100'
             />
@@ -887,7 +858,7 @@ const MathTrainerApp = () => {
               disabled={!userAnswer}
               className='w-full py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 disabled:from-gray-300 disabled:to-gray-400 text-white rounded-xl font-bold text-xl transition shadow-lg disabled:cursor-not-allowed'
             >
-              Antwort prüfen
+              {t('buttons.check')}
             </button>
           ) : (
             <div className='space-y-4'>
@@ -901,7 +872,7 @@ const MathTrainerApp = () => {
                 <p className='text-2xl font-bold mb-2'>{feedback.message}</p>
                 {!feedback.isCorrect && (
                   <p className='text-lg'>
-                    Die richtige Antwort ist:{" "}
+                    {t('problem.correctAnswer')}{" "}
                     <span className='font-bold text-2xl'>
                       {feedback.correctAnswer}
                     </span>
@@ -914,16 +885,16 @@ const MathTrainerApp = () => {
                 className='w-full py-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl font-bold text-xl transition shadow-lg flex items-center justify-center gap-2'
               >
                 {mode === "quiz" && quizIndex === quizQuestions.length - 1 ? (
-                  <>Ergebnisse anzeigen</>
+                  <>{t('buttons.showResults')}</>
                 ) : settings.autoPlayNext ? (
                   <>
                     <RotateCcw size={24} />
-                    Wird automatisch geladen...
+                    {t('buttons.autoLoading')}
                   </>
                 ) : (
                   <>
                     <RotateCcw size={24} />
-                    Nächste Aufgabe
+                    {t('buttons.next')}
                   </>
                 )}
               </button>
@@ -935,10 +906,10 @@ const MathTrainerApp = () => {
               <div>
                 <div className='flex justify-between items-center mb-2'>
                   <span className='text-lg font-semibold text-gray-700'>
-                    Aufgabe {levelProblemIndex + 1} von {levelProblems.length}
+                    {t('score.question', { current: levelProblemIndex + 1, total: levelProblems.length })}
                   </span>
                   <span className='text-lg font-semibold text-gray-700'>
-                    Richtig: {levelScore.correct} | Gesamt: {levelScore.total}
+                    {t('score.correct')}: {levelScore.correct} | {t('score.total')}: {levelScore.total}
                   </span>
                 </div>
                 <div className='w-full bg-gray-200 rounded-full h-2'>
@@ -952,12 +923,12 @@ const MathTrainerApp = () => {
                   ></div>
                 </div>
                 <p className='text-center text-base font-medium text-gray-600 mt-2'>
-                  80% richtige Antworten sind nötig um die Stufe zu schaffen!
+                  {t('score.successRate', { percent: 80 })}
                 </p>
               </div>
             ) : (
               <p className='text-center text-gray-600'>
-                Richtig: {score.correct} | Gesamt: {score.total}
+                {t('score.correct')}: {score.correct} | {t('score.total')}: {score.total}
               </p>
             )}
           </div>

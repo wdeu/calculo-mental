@@ -5,9 +5,10 @@
   },
   "menu": {
     "practice": "Prática Livre",
-    "quiz": "Modo de Questionário",
-    "levels": "Modo de Níveis",
-    "settings": "Mostrar Definições"
+    "quiz": "Questionário (10 Perguntas)",
+    "levels": "Treino por Níveis (16 Níveis)",
+    "settings": "Mostrar Definições",
+    "hideSettings": "Esconder Definições"
   },
   "modes": {
     "practice": "Prática Livre",
@@ -27,7 +28,8 @@
     "levelSelection": "Seleção de Nível",
     "mainMenu": "Menu Principal",
     "restart": "Recomeçar",
-    "readAloud": "Ler exercício"
+    "readAloud": "Ler exercício",
+    "backToMenu": "Voltar ao Menu"
   },
   "problem": {
     "question": "Quanto é {{num1}} {{operation}} {{num2}}?",
@@ -98,7 +100,8 @@
         "Não está correto. Calcula novamente! 🔢",
         "Não está certo. Tenta de novo! 📏"
       ]
-    }
+    },
+    "nextTask": "Avança para o próximo exercício!"
   },
   "settings": {
     "title": "Definições",
@@ -108,10 +111,16 @@
     "voice": "Voz",
     "speechRate": "Velocidade da Fala",
     "testVoice": "Testar Voz",
-    "autoPlayNext": "Avançar Automaticamente",
-    "showEquation": "Mostrar Exercício",
+    "autoPlayNext": "Avançar automaticamente para a próxima pergunta",
+    "autoPlayNextHint": "Após o feedback, avança automaticamente",
+    "showEquation": "Mostrar exercício",
+    "showEquationHint": "Quando desligado, só ouvir (cálculo mental puro)",
     "mentalMathMode": "Modo de Cálculo Mental",
-    "close": "Fechar"
+    "mentalMathModeHint": "Mostra \"Cálculo Mental\" em vez do exercício",
+    "close": "Fechar",
+    "slow": "Lento",
+    "normal": "Normal",
+    "fast": "Rápido"
   },
   "difficulties": {
     "easy": "Fácil",
@@ -128,22 +137,42 @@
     "correct": "Correto",
     "total": "Total",
     "question": "Exercício {{current}} de {{total}}",
-    "successRate": "{{percent}}% de respostas corretas são necessárias para completar o nível!"
+    "successRate": "{{percent}}% de respostas corretas são necessárias para completar o nível!",
+    "stats": "Estatísticas: {{correct}} de {{total}} corretas ({{percent}}%)"
   },
   "results": {
-    "title": "Resultado do Questionário",
-    "score": "Acertaste {{correct}} de {{total}} exercícios!",
+    "title": "Questionário concluído!",
+    "score": "{{correct}} de {{total}} corretas",
     "percentage": "Isso são {{percent}}%!",
-    "perfect": "Perfeito! 🏆",
-    "great": "Muito bom! 🌟",
-    "good": "Bem feito! 👍",
-    "keepPracticing": "Continua a praticar! 💪"
+    "perfect": "Perfeito! És um campeão da matemática!",
+    "great": "Muito bom! Continua assim!",
+    "good": "Bem feito! A prática faz o mestre!",
+    "keepPracticing": "Não desistas! Tenta outra vez!"
   },
   "levelComplete": {
-    "title": "Nível Concluído! 🎉",
+    "title": "Nível Concluído!",
     "completed": "Nível {{level}} concluído!",
     "unlockCode": "O teu código:",
     "rememberCode": "Lembra-te deste código!",
     "nextUnlocked": "Nível {{level}} desbloqueado!"
+  },
+  "levelSelector": {
+    "title": "Seleção de Nível",
+    "subtitle": "Escolhe o teu nível para praticar",
+    "progress": "O teu progresso",
+    "completed": "Concluído",
+    "unlocked": "Desbloqueado",
+    "progressLabel": "Progresso",
+    "accuracy": "Precisão",
+    "tasks": "{{count}} exercícios",
+    "legend": "Legenda:",
+    "locked": "Bloqueado",
+    "available": "Disponível",
+    "current": "Atual",
+    "mixed16": "Mistura 1-6",
+    "littleBrother": "Irmão Mais Novo",
+    "mixed1013": "Mistura 10-13",
+    "allTasks": "Todos os Exercícios",
+    "finale": "Final"
   }
 }

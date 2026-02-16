@@ -1,7 +1,9 @@
 import React from 'react';
 import { Lock, CheckCircle, Play, Star, Trophy } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const LevelSelector = ({ levelSystem, onLevelSelect, onBack }) => {
+  const { t } = useTranslation();
   const allLevels = levelSystem.getAllLevels();
   const overallProgress = levelSystem.getOverallProgress();
 
@@ -44,11 +46,11 @@ const LevelSelector = ({ levelSystem, onLevelSelect, onBack }) => {
   };
 
   const getSpecialLevelInfo = (level) => {
-    if (level.level === 7) return "📚 Gemischt 1-6";
-    if (level.level === 9) return "🎯 Kleiner Bruder";
-    if (level.level === 14) return "📚 Gemischt 10-13";
-    if (level.level === 15) return "🏆 Alle Aufgaben";
-    if (level.level === 16) return "🎉 Finale";
+    if (level.level === 7) return `📚 ${t('levelSelector.mixed16')}`;
+    if (level.level === 9) return `🎯 ${t('levelSelector.littleBrother')}`;
+    if (level.level === 14) return `📚 ${t('levelSelector.mixed1013')}`;
+    if (level.level === 15) return `🏆 ${t('levelSelector.allTasks')}`;
+    if (level.level === 16) return `🎉 ${t('levelSelector.finale')}`;
     return null;
   };
 
@@ -59,46 +61,46 @@ const LevelSelector = ({ levelSystem, onLevelSelect, onBack }) => {
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-purple-600">Level Auswahl</h1>
-              <p className="text-gray-600">Wähle dein Level zum Üben</p>
+              <h1 className="text-3xl font-bold text-purple-600">{t('levelSelector.title')}</h1>
+              <p className="text-gray-600">{t('levelSelector.subtitle')}</p>
             </div>
             <button
               onClick={onBack}
               className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition"
             >
-              Zurück
+              {t('buttons.back')}
             </button>
           </div>
 
           {/* Progress Overview */}
           <div className="mb-8 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-semibold text-gray-700">Dein Fortschritt</h3>
+              <h3 className="text-lg font-semibold text-gray-700">{t('levelSelector.progress')}</h3>
               <Trophy className="w-6 h-6 text-yellow-500" />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
               <div>
                 <div className="text-2xl font-bold text-green-600">{overallProgress.completedLevels}</div>
-                <div className="text-sm text-gray-600">Abgeschlossen</div>
+                <div className="text-sm text-gray-600">{t('levelSelector.completed')}</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-blue-600">{overallProgress.unlockedLevels}</div>
-                <div className="text-sm text-gray-600">Freigeschaltet</div>
+                <div className="text-sm text-gray-600">{t('levelSelector.unlocked')}</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-purple-600">{overallProgress.completionPercentage}%</div>
-                <div className="text-sm text-gray-600">Fortschritt</div>
+                <div className="text-sm text-gray-600">{t('levelSelector.progressLabel')}</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-orange-600">{overallProgress.overallAccuracy}%</div>
-                <div className="text-sm text-gray-600">Genauigkeit</div>
+                <div className="text-sm text-gray-600">{t('levelSelector.accuracy')}</div>
               </div>
             </div>
-            
+
             {/* Progress Bar */}
             <div className="mt-4">
               <div className="w-full bg-gray-200 rounded-full h-3">
-                <div 
+                <div
                   className="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-500"
                   style={{ width: `${overallProgress.completionPercentage}%` }}
                 ></div>
@@ -111,7 +113,7 @@ const LevelSelector = ({ levelSystem, onLevelSelect, onBack }) => {
             {allLevels.map((level) => {
               const progress = levelSystem.getLevelProgress(level.id);
               const specialInfo = getSpecialLevelInfo(level);
-              
+
               return (
                 <div
                   key={level.id}
@@ -137,7 +139,7 @@ const LevelSelector = ({ levelSystem, onLevelSelect, onBack }) => {
                   {/* Problem Count */}
                   {level.problems && level.problems.length > 0 && (
                     <div className="text-xs text-gray-600 mb-1">
-                      {level.problems.length} Aufgaben
+                      {t('levelSelector.tasks', { count: level.problems.length })}
                     </div>
                   )}
 
@@ -149,7 +151,7 @@ const LevelSelector = ({ levelSystem, onLevelSelect, onBack }) => {
                         <span>{progress.percentage}%</span>
                       </div>
                       <div className="w-full bg-white bg-opacity-50 rounded-full h-1 mt-1">
-                        <div 
+                        <div
                           className="bg-current h-1 rounded-full transition-all"
                           style={{ width: `${progress.percentage}%` }}
                         ></div>
@@ -170,23 +172,23 @@ const LevelSelector = ({ levelSystem, onLevelSelect, onBack }) => {
 
           {/* Instructions */}
           <div className="mt-8 p-4 bg-gray-50 rounded-xl">
-            <h4 className="font-semibold text-gray-700 mb-2">Legende:</h4>
+            <h4 className="font-semibold text-gray-700 mb-2">{t('levelSelector.legend')}</h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <Lock className="w-4 h-4 text-gray-400" />
-                <span>Gesperrt</span>
+                <span>{t('levelSelector.locked')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Star className="w-4 h-4 text-yellow-500" />
-                <span>Verfügbar</span>
+                <span>{t('levelSelector.available')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Play className="w-4 h-4 text-blue-500" />
-                <span>Aktuell</span>
+                <span>{t('levelSelector.current')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500" />
-                <span>Abgeschlossen</span>
+                <span>{t('levelSelector.completed')}</span>
               </div>
             </div>
           </div>

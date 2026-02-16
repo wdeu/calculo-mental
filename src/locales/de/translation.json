@@ -5,9 +5,10 @@
   },
   "menu": {
     "practice": "Freies Üben",
-    "quiz": "Quiz-Modus",
-    "levels": "Stufen-Modus",
-    "settings": "Einstellungen anzeigen"
+    "quiz": "Quiz (10 Fragen)",
+    "levels": "Level Training (16 Stufen)",
+    "settings": "Einstellungen anzeigen",
+    "hideSettings": "Einstellungen verstecken"
   },
   "modes": {
     "practice": "Freies Üben",
@@ -27,7 +28,8 @@
     "levelSelection": "Level Auswahl",
     "mainMenu": "Hauptmenü",
     "restart": "Neu starten",
-    "readAloud": "Aufgabe vorlesen"
+    "readAloud": "Aufgabe vorlesen",
+    "backToMenu": "Zurück zum Menü"
   },
   "problem": {
     "question": "Was ist {{num1}} {{operation}} {{num2}}?",
@@ -98,7 +100,8 @@
         "Nicht korrekt. Rechne nochmal nach! 🔢",
         "Das stimmt nicht. Probier es nochmal! 📏"
       ]
-    }
+    },
+    "nextTask": "Weiter zur nächsten Aufgabe!"
   },
   "settings": {
     "title": "Einstellungen",
@@ -108,10 +111,16 @@
     "voice": "Stimme",
     "speechRate": "Sprechgeschwindigkeit",
     "testVoice": "Stimme testen",
-    "autoPlayNext": "Automatisch weiter",
-    "showEquation": "Aufgabe zeigen",
+    "autoPlayNext": "Automatisch zur nächsten Frage",
+    "autoPlayNextHint": "Nach dem Feedback geht es automatisch weiter",
+    "showEquation": "Aufgabe anzeigen",
+    "showEquationHint": "Wenn ausgeschaltet, nur zuhören (reines Kopfrechnen)",
     "mentalMathMode": "Kopfrechnen-Modus",
-    "close": "Schließen"
+    "mentalMathModeHint": "Zeigt \"Kopfrechnen\" statt der Rechenaufgabe",
+    "close": "Schließen",
+    "slow": "Langsam",
+    "normal": "Normal",
+    "fast": "Schnell"
   },
   "difficulties": {
     "easy": "Leicht",
@@ -119,31 +128,51 @@
     "hard": "Schwer"
   },
   "feedbackStyles": {
-    "encouraging": "Aufmunternd",
+    "encouraging": "Ermutigend",
     "simple": "Einfach",
-    "playful": "Verspielt",
-    "teacher": "Lehrer-Stil"
+    "playful": "Spielerisch",
+    "teacher": "Lehrer"
   },
   "score": {
     "correct": "Richtig",
     "total": "Gesamt",
     "question": "Aufgabe {{current}} von {{total}}",
-    "successRate": "{{percent}}% richtige Antworten sind nötig um die Stufe zu schaffen!"
+    "successRate": "{{percent}}% richtige Antworten sind nötig um die Stufe zu schaffen!",
+    "stats": "Bisherige Statistik: {{correct}} von {{total}} richtig ({{percent}}%)"
   },
   "results": {
-    "title": "Quiz Ergebnis",
-    "score": "Du hast {{correct}} von {{total}} Aufgaben richtig gelöst!",
+    "title": "Quiz beendet!",
+    "score": "{{correct}} von {{total}} richtig",
     "percentage": "Das sind {{percent}}%!",
-    "perfect": "Perfekt! 🏆",
-    "great": "Sehr gut! 🌟",
-    "good": "Gut gemacht! 👍",
-    "keepPracticing": "Weiter üben! 💪"
+    "perfect": "Hervorragend! Du bist ein Mathe-Champion!",
+    "great": "Sehr gut! Weiter so!",
+    "good": "Gut gemacht! Übung macht den Meister!",
+    "keepPracticing": "Nicht aufgeben! Versuche es nochmal!"
   },
   "levelComplete": {
-    "title": "Stufe geschafft! 🎉",
+    "title": "Stufe geschafft!",
     "completed": "Stufe {{level}} abgeschlossen!",
     "unlockCode": "Dein Code:",
     "rememberCode": "Merke dir diesen Code!",
     "nextUnlocked": "Stufe {{level}} freigeschaltet!"
+  },
+  "levelSelector": {
+    "title": "Level Auswahl",
+    "subtitle": "Wähle dein Level zum Üben",
+    "progress": "Dein Fortschritt",
+    "completed": "Abgeschlossen",
+    "unlocked": "Freigeschaltet",
+    "progressLabel": "Fortschritt",
+    "accuracy": "Genauigkeit",
+    "tasks": "{{count}} Aufgaben",
+    "legend": "Legende:",
+    "locked": "Gesperrt",
+    "available": "Verfügbar",
+    "current": "Aktuell",
+    "mixed16": "Gemischt 1-6",
+    "littleBrother": "Kleiner Bruder",
+    "mixed1013": "Gemischt 10-13",
+    "allTasks": "Alle Aufgaben",
+    "finale": "Finale"
   }
 }
