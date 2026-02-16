@@ -7,6 +7,16 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
+## 🌐 Live Demo
+
+**Try it now:** https://calculo-mental-pt.netlify.app
+
+Features:
+- 🇵🇹 Portuguese (European)
+- 🇩🇪 German
+- 🔊 Text-to-speech
+- ➕➖✖️➗ All math operations
+---
 
 ## 📖 Sobre / Über
 
