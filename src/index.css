@@ -157,3 +157,55 @@ code {
 .text-gray-500 { color: #6b7280; }
 .max-w-md { max-width: 28rem; }
 .text-purple-600 { color: #9333ea; }
+
+/* Layout utilities */
+.fixed { position: fixed; }
+.sticky { position: sticky; }
+.inset-0 { inset: 0; }
+.top-0 { top: 0; }
+.z-10 { z-index: 10; }
+.z-50 { z-index: 1000; }
+.overflow-y-auto { overflow-y: auto; }
+.justify-end { justify-content: flex-end; }
+
+/* Modal backdrop */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Settings bar */
+.settings-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  height: 44px;
+  padding: 0 1rem;
+  background: #faf5ff;
+  border-radius: 1rem 1rem 0 0;
+}
+
+/* Responsive title */
+.title-responsive {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: 700;
+  padding: 8px 16px;
+}

@@ -36,33 +36,39 @@ class TTSService {
            langVoices[0];
   }
 
-  // Main speak method
+  // Main speak method - returns Promise that resolves when speech ends
   speak(text, isCorrect = null) {
-    if (!this.isAvailable) {
-      console.warn('⚠️  Speech synthesis not available');
-      return;
-    }
+    return new Promise((resolve) => {
+      if (!this.isAvailable) {
+        console.warn('⚠️  Speech synthesis not available');
+        resolve();
+        return;
+      }
 
-    // Cancel any ongoing speech
-    window.speechSynthesis.cancel();
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = this.currentLanguage;
-    utterance.rate = 0.9; // Slightly slower for clarity
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = this.currentLanguage;
+      utterance.rate = 0.9; // Slightly slower for clarity
 
-    // Add emotion through pitch for feedback
-    if (isCorrect !== null) {
-      utterance.pitch = isCorrect ? 1.2 : 0.9; // Higher pitch for correct, lower for incorrect
-    }
+      // Add emotion through pitch for feedback
+      if (isCorrect !== null) {
+        utterance.pitch = isCorrect ? 1.2 : 0.9; // Higher pitch for correct, lower for incorrect
+      }
 
-    // Set best available voice
-    const bestVoice = this.getBestVoice();
-    if (bestVoice) {
-      utterance.voice = bestVoice;
-      console.log(`🎤 Using voice: ${bestVoice.name} (${bestVoice.lang})`);
-    }
+      // Set best available voice
+      const bestVoice = this.getBestVoice();
+      if (bestVoice) {
+        utterance.voice = bestVoice;
+        console.log(`🎤 Using voice: ${bestVoice.name} (${bestVoice.lang})`);
+      }
 
-    window.speechSynthesis.speak(utterance);
+      utterance.onend = () => resolve();
+      utterance.onerror = () => resolve();
+
+      window.speechSynthesis.speak(utterance);
+    });
   }
 
   // Preload common phrases (for Web Speech API, this just ensures voices are loaded)
