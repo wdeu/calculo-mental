@@ -209,3 +209,147 @@ code {
   font-weight: 700;
   padding: 8px 16px;
 }
+
+/* Level practice title - responsive with truncation */
+.level-title {
+  font-size: clamp(1rem, 4vw, 1.5rem);
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+
+/* Problem display - large fluid numbers */
+.problem-display {
+  font-size: clamp(2rem, 8vw, 4rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* iOS-style input field */
+.ios-input {
+  width: 100%;
+  padding: clamp(0.75rem, 3vw, 1.25rem);
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  text-align: center;
+  border: 2px solid #d8b4fe;
+  border-radius: 1rem;
+  background: #faf5ff;
+  color: #1f2937;
+  outline: none;
+  transition: border-color 200ms, box-shadow 200ms;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.ios-input:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+}
+
+.ios-input:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+}
+
+/* iOS-style touch-friendly button */
+.ios-btn {
+  width: 100%;
+  min-height: 50px;
+  padding: clamp(0.75rem, 2.5vw, 1rem) 1.5rem;
+  border: none;
+  border-radius: 0.875rem;
+  font-weight: 700;
+  font-size: clamp(1rem, 3.5vw, 1.25rem);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: filter 200ms, transform 100ms;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ios-btn:active {
+  transform: scale(0.97);
+}
+
+.ios-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ios-btn-green {
+  background: linear-gradient(to right, #10b981, #059669);
+}
+
+.ios-btn-purple {
+  background: linear-gradient(to right, #8b5cf6, #7c3aed);
+}
+
+.ios-btn-gray {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.ios-btn-gray:hover {
+  background: #d1d5db;
+}
+
+/* Feedback card */
+.feedback-card {
+  padding: clamp(1rem, 4vw, 1.5rem);
+  border-radius: 1rem;
+  text-align: center;
+  border-width: 2px;
+  border-style: solid;
+}
+
+.feedback-card .feedback-text {
+  font-size: clamp(1.1rem, 4vw, 1.5rem);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.feedback-card .feedback-answer {
+  font-size: clamp(1rem, 3.5vw, 1.25rem);
+}
+
+/* Responsive padding for practice view */
+.practice-container {
+  padding: clamp(1rem, 4vw, 2rem);
+}
+
+/* Problem area */
+.problem-area {
+  padding: clamp(1rem, 4vw, 1.5rem);
+  background: linear-gradient(to right, #eff6ff, #faf5ff);
+  border-radius: 1rem;
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
+}
+
+/* Score bar */
+.score-bar {
+  padding: clamp(0.75rem, 3vw, 1rem);
+  background: #f9fafb;
+  border-radius: 0.75rem;
+  margin-top: clamp(1rem, 3vw, 1.5rem);
+}
+
+/* Small screen adjustments */
+@media (max-width: 400px) {
+  .p-8 { padding: 0.75rem; }
+  .level-title { font-size: clamp(0.875rem, 3.5vw, 1.25rem); }
+  .problem-display { font-size: clamp(1.75rem, 7vw, 3rem); }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+}

@@ -59,14 +59,15 @@ const LevelSelector = ({ levelSystem, onLevelSelect, onBack }) => {
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-3xl shadow-2xl p-6">
           {/* Header */}
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h1 className="text-3xl font-bold text-purple-600">{t('levelSelector.title')}</h1>
-              <p className="text-gray-600">{t('levelSelector.subtitle')}</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', gap: '0.5rem' }}>
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <h1 style={{ fontSize: 'clamp(1.25rem, 5vw, 1.875rem)', fontWeight: 700, color: '#9333ea', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t('levelSelector.title')}</h1>
+              <p style={{ fontSize: 'clamp(0.75rem, 2.5vw, 1rem)', color: '#4b5563', margin: 0 }}>{t('levelSelector.subtitle')}</p>
             </div>
             <button
               onClick={onBack}
-              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition"
+              className="ios-btn ios-btn-gray"
+              style={{ width: 'auto', minHeight: '34px', padding: '0.375rem 1rem', fontSize: '0.875rem', borderRadius: '0.5rem', flexShrink: 0 }}
             >
               {t('buttons.back')}
             </button>

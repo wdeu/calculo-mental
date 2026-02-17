@@ -720,22 +720,22 @@ const MathTrainerApp = () => {
   if (mode === "results") {
     const percentage = Math.round((score.correct / score.total) * 100);
     return (
-      <div className='min-h-screen bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-8 flex items-center justify-center'>
-        <div className='bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center'>
-          <h2 className='text-3xl font-bold mb-4 text-purple-600'>
+      <div className='min-h-screen bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-8' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className='bg-white rounded-3xl shadow-2xl max-w-md w-full text-center' style={{ padding: 'clamp(1.5rem, 5vw, 2rem)' }}>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 5vw, 1.875rem)', fontWeight: 700, marginBottom: '1rem', color: '#9333ea' }}>
             {t('results.title')} 🎉
           </h2>
           <div className='mb-6'>
-            <div className='text-6xl font-bold text-blue-600 mb-2'>
+            <div style={{ fontSize: 'clamp(3rem, 12vw, 3.75rem)', fontWeight: 700, color: '#2563eb', marginBottom: '0.5rem' }}>
               {percentage}%
             </div>
-            <p className='text-xl text-gray-700'>
+            <p style={{ fontSize: 'clamp(1rem, 4vw, 1.25rem)', color: '#374151' }}>
               {t('results.score', { correct: score.correct, total: score.total })}
             </p>
           </div>
 
-          <div className='mb-6 p-4 bg-gradient-to-r from-yellow-100 to-yellow-200 rounded-xl'>
-            <p className='text-lg font-semibold'>
+          <div style={{ marginBottom: '1.5rem', padding: '1rem', background: 'linear-gradient(to right, #fef3c7, #fde68a)', borderRadius: '0.75rem' }}>
+            <p style={{ fontSize: 'clamp(1rem, 3.5vw, 1.125rem)', fontWeight: 600 }}>
               {percentage >= 90
                 ? `🌟 ${t('results.perfect')}`
                 : percentage >= 70
@@ -751,7 +751,7 @@ const MathTrainerApp = () => {
               setMode("menu");
               setScore({ correct: 0, total: 0 });
             }}
-            className='w-full py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-xl font-bold text-lg transition'
+            className='ios-btn ios-btn-purple'
           >
             {t('buttons.backToMenu')}
           </button>
@@ -763,36 +763,36 @@ const MathTrainerApp = () => {
   // Level completion modal
   if (showLevelComplete && levelCompleteData) {
     return (
-      <div className='min-h-screen bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-8 flex items-center justify-center'>
-        <div className='bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center'>
-          <h2 className='text-3xl font-bold mb-4 text-green-600'>
+      <div className='min-h-screen bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-8' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className='bg-white rounded-3xl shadow-2xl max-w-md w-full text-center' style={{ padding: 'clamp(1.5rem, 5vw, 2rem)' }}>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 5vw, 1.875rem)', fontWeight: 700, marginBottom: '1rem', color: '#059669' }}>
             {t('levelComplete.title')} 🎉
           </h2>
           <div className='mb-6'>
-            <div className='text-6xl mb-4'>🏆</div>
-            <p className='text-xl text-gray-700 mb-2'>
+            <div style={{ fontSize: 'clamp(3rem, 10vw, 3.75rem)', marginBottom: '1rem' }}>🏆</div>
+            <p style={{ fontSize: 'clamp(1rem, 4vw, 1.25rem)', color: '#374151', marginBottom: '0.75rem' }}>
               {t('levelComplete.completed', { level: currentLevelId?.split("-")[1] })}
             </p>
-            <div className='bg-yellow-100 border-2 border-yellow-300 rounded-xl p-4 mb-4'>
-              <p className='text-lg font-bold text-yellow-800'>
+            <div style={{ background: '#fef3c7', border: '2px solid #fcd34d', borderRadius: '0.75rem', padding: 'clamp(0.75rem, 3vw, 1rem)', marginBottom: '1rem' }}>
+              <p style={{ fontSize: 'clamp(1rem, 3.5vw, 1.125rem)', fontWeight: 700, color: '#92400e' }}>
                 {t('levelComplete.unlockCode')} {levelCompleteData.unlockCode}
               </p>
-              <p className='text-sm text-yellow-700'>{t('levelComplete.rememberCode')}</p>
+              <p style={{ fontSize: 'clamp(0.75rem, 2.5vw, 0.875rem)', color: '#a16207' }}>{t('levelComplete.rememberCode')}</p>
             </div>
             {levelCompleteData.nextLevelUnlocked && (
-              <p className='text-green-600 font-semibold'>
+              <p style={{ color: '#059669', fontWeight: 600, fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
                 {t('levelComplete.nextUnlocked', { level: levelCompleteData.nextLevelUnlocked.split("-")[1] })}
               </p>
             )}
           </div>
-          <div className='space-y-3'>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {levelCompleteData.nextLevelUnlocked && (
               <button
                 onClick={() => {
                   setShowLevelComplete(false);
                   startLevelPractice(levelCompleteData.nextLevelUnlocked);
                 }}
-                className='w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold text-lg transition'
+                className='ios-btn ios-btn-green'
               >
                 {t('buttons.nextLevel')}
               </button>
@@ -802,7 +802,7 @@ const MathTrainerApp = () => {
                 setShowLevelComplete(false);
                 setMode("levels");
               }}
-              className='w-full py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-bold text-lg transition'
+              className='ios-btn ios-btn-purple'
             >
               {t('buttons.levelSelection')}
             </button>
@@ -811,7 +811,7 @@ const MathTrainerApp = () => {
                 setShowLevelComplete(false);
                 setMode("menu");
               }}
-              className='w-full py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-xl font-bold text-lg transition'
+              className='ios-btn ios-btn-gray'
             >
               {t('buttons.mainMenu')}
             </button>
@@ -824,9 +824,10 @@ const MathTrainerApp = () => {
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-8'>
       <div className='max-w-2xl mx-auto'>
-        <div className='bg-white rounded-3xl shadow-2xl p-8'>
-          <div className='flex justify-between items-center mb-6'>
-            <h2 className='text-2xl font-bold text-purple-600'>
+        <div className='bg-white rounded-3xl shadow-2xl' style={{ overflow: 'hidden' }}>
+          {/* iOS-style header bar */}
+          <div className='settings-bar' style={{ justifyContent: 'space-between', padding: '0 1rem' }}>
+            <h2 className='level-title text-purple-600' style={{ margin: 0 }}>
               {mode === "practice"
                 ? t('modes.practice')
                 : mode === "level-practice"
@@ -835,150 +836,175 @@ const MathTrainerApp = () => {
             </h2>
             <button
               onClick={() => setMode("menu")}
-              className='px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition'
+              className='ios-btn ios-btn-gray'
+              style={{ width: 'auto', minHeight: '34px', padding: '0.375rem 1rem', fontSize: '0.875rem', borderRadius: '0.5rem' }}
             >
               {t('buttons.back')}
             </button>
           </div>
 
-          {mode === "quiz" && (
-            <div className='mb-4'>
-              <div className='flex gap-1'>
-                {quizQuestions.map((_, idx) => (
-                  <div
-                    key={idx}
-                    className={`h-2 flex-1 rounded ${
-                      idx < quizIndex
-                        ? "bg-green-500"
-                        : idx === quizIndex
-                        ? "bg-blue-500"
-                        : "bg-gray-200"
-                    }`}
-                  />
-                ))}
+          <div className='practice-container'>
+            {mode === "quiz" && (
+              <div style={{ marginBottom: 'clamp(0.75rem, 2vw, 1rem)' }}>
+                <div className='flex gap-1'>
+                  {quizQuestions.map((_, idx) => (
+                    <div
+                      key={idx}
+                      className={`flex-1 rounded`}
+                      style={{
+                        height: '6px',
+                        background: idx < quizIndex ? '#10b981' : idx === quizIndex ? '#3b82f6' : '#e5e7eb',
+                        borderRadius: '3px',
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Problem display area */}
+            <div className='problem-area'>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'clamp(0.5rem, 2vw, 1rem)' }}>
+                <button
+                  onClick={() => speakProblem(currentProblem, inputRef)}
+                  style={{
+                    padding: 'clamp(0.5rem, 2vw, 0.75rem)',
+                    background: '#3b82f6',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '50%',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    minWidth: '44px',
+                    minHeight: '44px',
+                    transition: 'background 150ms',
+                  }}
+                  title={t('buttons.readAloud')}
+                >
+                  <Volume2 size={24} />
+                </button>
+                {settings.kopfrechnenMode ? (
+                  <div className='problem-display text-purple-600'>
+                    {t('problem.mentalMath')}
+                  </div>
+                ) : settings.showEquation ? (
+                  <div className='problem-display text-gray-800'>
+                    {currentProblem.num1}{" "}
+                    {operationSymbols[currentProblem.operation]}{" "}
+                    {currentProblem.num2} = ?
+                  </div>
+                ) : (
+                  <div className='problem-display text-gray-500 italic' style={{ fontSize: 'clamp(1.5rem, 6vw, 2.5rem)' }}>
+                    {t('problem.listenCarefully')} 👂
+                  </div>
+                )}
               </div>
             </div>
-          )}
 
-          <div className='mb-6 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl'>
-            <div className='flex items-center justify-center gap-4 mb-4'>
+            {/* iOS-style input */}
+            <div style={{ marginBottom: 'clamp(0.75rem, 3vw, 1.5rem)' }}>
+              <input
+                ref={inputRef}
+                type='number'
+                inputMode='numeric'
+                pattern='[0-9]*'
+                value={userAnswer}
+                onChange={(e) => setUserAnswer(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder={t('problem.placeholder')}
+                disabled={feedback !== null}
+                className='ios-input'
+              />
+            </div>
+
+            {/* Action buttons */}
+            {!feedback ? (
               <button
-                onClick={() => speakProblem(currentProblem, inputRef)}
-                className='p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-full transition'
-                title={t('buttons.readAloud')}
+                onClick={checkAnswer}
+                disabled={!userAnswer}
+                className='ios-btn ios-btn-green shadow-lg'
               >
-                <Volume2 size={24} />
+                {t('buttons.check')}
               </button>
-              {settings.kopfrechnenMode ? (
-                <div className='text-5xl font-bold text-purple-600'>
-                  {t('problem.mentalMath')}
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(0.75rem, 2vw, 1rem)' }}>
+                <div
+                  className='feedback-card'
+                  style={{
+                    background: feedback.isCorrect
+                      ? 'linear-gradient(to right, #dcfce7, #bbf7d0)'
+                      : 'linear-gradient(to right, #fee2e2, #fecaca)',
+                    borderColor: feedback.isCorrect ? '#4ade80' : '#f87171',
+                  }}
+                >
+                  <p className='feedback-text'>{feedback.message}</p>
+                  {!feedback.isCorrect && (
+                    <p className='feedback-answer'>
+                      {t('problem.correctAnswer')}{" "}
+                      <span style={{ fontWeight: 700, fontSize: 'clamp(1.25rem, 5vw, 1.75rem)' }}>
+                        {feedback.correctAnswer}
+                      </span>
+                    </p>
+                  )}
                 </div>
-              ) : settings.showEquation ? (
-                <div className='text-5xl font-bold text-gray-800'>
-                  {currentProblem.num1}{" "}
-                  {operationSymbols[currentProblem.operation]}{" "}
-                  {currentProblem.num2} = ?
+
+                <button
+                  onClick={nextQuestion}
+                  className='ios-btn ios-btn-purple shadow-lg'
+                >
+                  {mode === "quiz" && quizIndex === quizQuestions.length - 1 ? (
+                    <>{t('buttons.showResults')}</>
+                  ) : settings.autoPlayNext ? (
+                    <>
+                      <RotateCcw size={20} />
+                      {t('buttons.autoLoading')}
+                    </>
+                  ) : (
+                    <>
+                      <RotateCcw size={20} />
+                      {t('buttons.next')}
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+
+            {/* Score bar */}
+            <div className='score-bar'>
+              {mode === "level-practice" ? (
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', flexWrap: 'wrap', gap: '0.25rem' }}>
+                    <span style={{ fontSize: 'clamp(0.8rem, 3vw, 1rem)', fontWeight: 600, color: '#374151' }}>
+                      {t('score.question', { current: levelProblemIndex + 1, total: levelProblems.length })}
+                    </span>
+                    <span style={{ fontSize: 'clamp(0.8rem, 3vw, 1rem)', fontWeight: 600, color: '#374151' }}>
+                      {t('score.correct')}: {levelScore.correct} | {t('score.total')}: {levelScore.total}
+                    </span>
+                  </div>
+                  <div className='w-full bg-gray-200 rounded-full' style={{ height: '6px' }}>
+                    <div
+                      style={{
+                        width: `${((levelProblemIndex + 1) / levelProblems.length) * 100}%`,
+                        height: '6px',
+                        borderRadius: '3px',
+                        background: '#3b82f6',
+                        transition: 'width 300ms',
+                      }}
+                    ></div>
+                  </div>
+                  <p style={{ textAlign: 'center', fontSize: 'clamp(0.75rem, 2.5vw, 0.875rem)', fontWeight: 500, color: '#6b7280', marginTop: '0.5rem' }}>
+                    {t('score.successRate', { percent: 80 })}
+                  </p>
                 </div>
               ) : (
-                <div className='text-4xl font-bold text-gray-500 italic'>
-                  {t('problem.listenCarefully')} 👂
-                </div>
+                <p style={{ textAlign: 'center', color: '#4b5563', fontSize: 'clamp(0.875rem, 3vw, 1rem)', margin: 0 }}>
+                  {t('score.correct')}: {score.correct} | {t('score.total')}: {score.total}
+                </p>
               )}
             </div>
-          </div>
-
-          <div className='mb-6'>
-            <input
-              ref={inputRef}
-              type='number'
-              value={userAnswer}
-              onChange={(e) => setUserAnswer(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder={t('problem.placeholder')}
-              disabled={feedback !== null}
-              className='w-full p-4 text-3xl text-center border-4 border-purple-300 rounded-xl focus:outline-none focus:border-purple-500 disabled:bg-gray-100'
-            />
-          </div>
-
-          {!feedback ? (
-            <button
-              onClick={checkAnswer}
-              disabled={!userAnswer}
-              className='w-full py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 disabled:from-gray-300 disabled:to-gray-400 text-white rounded-xl font-bold text-xl transition shadow-lg disabled:cursor-not-allowed'
-            >
-              {t('buttons.check')}
-            </button>
-          ) : (
-            <div className='space-y-4'>
-              <div
-                className={`p-6 rounded-xl text-center ${
-                  feedback.isCorrect
-                    ? "bg-gradient-to-r from-green-100 to-green-200 border-4 border-green-400"
-                    : "bg-gradient-to-r from-red-100 to-red-200 border-4 border-red-400"
-                }`}
-              >
-                <p className='text-2xl font-bold mb-2'>{feedback.message}</p>
-                {!feedback.isCorrect && (
-                  <p className='text-lg'>
-                    {t('problem.correctAnswer')}{" "}
-                    <span className='font-bold text-2xl'>
-                      {feedback.correctAnswer}
-                    </span>
-                  </p>
-                )}
-              </div>
-
-              <button
-                onClick={nextQuestion}
-                className='w-full py-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl font-bold text-xl transition shadow-lg flex items-center justify-center gap-2'
-              >
-                {mode === "quiz" && quizIndex === quizQuestions.length - 1 ? (
-                  <>{t('buttons.showResults')}</>
-                ) : settings.autoPlayNext ? (
-                  <>
-                    <RotateCcw size={24} />
-                    {t('buttons.autoLoading')}
-                  </>
-                ) : (
-                  <>
-                    <RotateCcw size={24} />
-                    {t('buttons.next')}
-                  </>
-                )}
-              </button>
-            </div>
-          )}
-
-          <div className='mt-6 p-4 bg-gray-50 rounded-xl'>
-            {mode === "level-practice" ? (
-              <div>
-                <div className='flex justify-between items-center mb-2'>
-                  <span className='text-lg font-semibold text-gray-700'>
-                    {t('score.question', { current: levelProblemIndex + 1, total: levelProblems.length })}
-                  </span>
-                  <span className='text-lg font-semibold text-gray-700'>
-                    {t('score.correct')}: {levelScore.correct} | {t('score.total')}: {levelScore.total}
-                  </span>
-                </div>
-                <div className='w-full bg-gray-200 rounded-full h-2'>
-                  <div
-                    className='bg-blue-500 h-2 rounded-full transition-all duration-300'
-                    style={{
-                      width: `${
-                        ((levelProblemIndex + 1) / levelProblems.length) * 100
-                      }%`,
-                    }}
-                  ></div>
-                </div>
-                <p className='text-center text-base font-medium text-gray-600 mt-2'>
-                  {t('score.successRate', { percent: 80 })}
-                </p>
-              </div>
-            ) : (
-              <p className='text-center text-gray-600'>
-                {t('score.correct')}: {score.correct} | {t('score.total')}: {score.total}
-              </p>
-            )}
           </div>
         </div>
       </div>
